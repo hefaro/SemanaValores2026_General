@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Suite de Juegos - Semana de los Valores 🌟</title>
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --accent: #06b6d4;
+            --text: #f8fafc;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text);
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            padding: 2rem;
+        }
+        .container {
+            max-width: 900px;
+            width: 100%;
+            text-align: center;
+        }
+        .grid-juegos {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+        .card-juego {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 1.5rem;
+            border: 1px solid #334155;
+            transition: transform 0.2s, border-color 0.2s;
+            cursor: pointer;
+        }
+        .card-juego:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>🌟 Semana de los Valores: Suite de Juegos 🌟</h1>
+        <p>Aprende, reflexiona y pon a prueba tu ética y convivencia.</p>
+
+        <div class="grid-juegos">
+            <div class="card-juego" id="btn-qqsm" onclick="lanzarJuego('qqsm')">
+                <h3>💰 ¿Quién Quiere Ser Millonario?</h3>
+                <p>Nivel básico de matemáticas.</p>
+            </div>
+            <div class="card-juego" id="btn-ruleta" onclick="lanzarJuego('enteros')">
+                <h3>🎡 Suma y multiplicación</h3>
+                <p>Resuelve dilemas en tiempo real.</p>
+            </div>
+
+            <div class="card-juego" id="btn-emparejar" onclick="lanzarJuego('atraviesa')">
+                <h3>🧩 Atraviesa</h3>
+                <p>Asocia cada valor con su acción</p>
+            </div>
+
+            <div class="card-juego" id="btn-trivia" onclick="lanzarJuego('funciones')">
+                <h3>🎯 Funciones </h3>
+                <p>Preguntas rápidas sobre funciones </p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function lanzarJuego(tipo) {
+            if (tipo === 'qqsm') {
+                window.location.href = 'qqsm/index.html';
+            } else if (tipo === 'enteros') {
+                window.location.href = 'FCEnteros/index.html';
+            } else if (tipo === 'atraviesa') {
+                window.location.href = 'atraviesa/index.html';
+ 	    } else if (tipo === 'funciones') {
+                window.location.href = 'funciones/index.html';
+
+            } else {
+                alert('Este juego estará disponible próximamente.');
+            }
+        }
+    </script>
+</body>
+</html>

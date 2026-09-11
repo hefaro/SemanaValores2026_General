@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Juega con Funciones - I.E. Narciso Cabal Salcedo</title>
+
+    <style>
+        :root {
+            --bg-color: #050505;
+            --panel-bg: rgba(20, 20, 20, 0.95);
+            --border-color: #333333;
+            --neon-blue: #00f2ff;
+            --neon-blue-transparent: rgba(0, 242, 255, 0.15);
+            --text-main: #ffffff;
+            --text-muted: #888888;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Courier New', Courier, monospace;
+            padding: 24px;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-bottom: 30px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 20px;
+        }
+
+        .title-neon {
+            color: var(--neon-blue);
+            font-size: 1.8rem;
+            font-weight: bold;
+            text-shadow: 0 0 10px var(--neon-blue);
+            margin-bottom: 5px;
+        }
+
+        .subtitle {
+            color: var(--text-muted);
+            font-size: 0.8rem;
+            font-style: italic;
+        }
+
+        .score-box {
+            text-align: right;
+        }
+
+        .score-label {
+            font-size: 0.65rem;
+            color: var(--text-muted);
+            letter-spacing: 1px;
+        }
+
+        .score-value {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: var(--text-main);
+            font-family: monospace;
+        }
+
+        .cyber-panel {
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
+            margin-bottom: 20px;
+        }
+
+        .cyber-panel.centered {
+            max-width: 480px;
+            margin: 40px auto;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .cyber-input {
+            width: 100%;
+            background-color: #111111;
+            color: #ffffff;
+            border: 1px solid var(--border-color);
+            padding: 16px;
+            border-radius: 8px;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.95rem;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        .cyber-input:focus {
+            border-color: var(--neon-blue);
+        }
+
+        .cyber-btn {
+            width: 100%;
+            background-color: var(--neon-blue);
+            color: #000000;
+            font-weight: 900;
+            padding: 16px;
+            border: none;
+            border-radius: 8px;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .cyber-btn:hover:not(:disabled) {
+            background-color: #00c8d4;
+            box-shadow: 0 0 15px var(--neon-blue);
+        }
+
+        .cyber-btn:disabled {
+            opacity: 0.2;
+            cursor: not-allowed;
+        }
+
+        .quiz-header {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            margin-bottom: 15px;
+        }
+
+        .question-title {
+            font-size: 1.2rem;
+            color: #e0f7fa;
+            margin-bottom: 20px;
+            line-height: 1.4;
+        }
+
+        .chart-container {
+            position: relative;
+            width: 100%;
+            min-height: 350px;
+            height: 350px;
+            background-color: #0a0a0a;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            margin-bottom: 25px;
+            padding: 15px;
+        }
+
+        .options-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+        }
+
+        @media (min-width: 600px) {
+            .options-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        .answer-chip {
+            background-color: #111111;
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 18px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            color: var(--text-main);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .answer-chip:hover {
+            border-color: var(--neon-blue);
+            background-color: var(--neon-blue-transparent);
+            transform: translateY(-2px);
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        /* DIPLOMA ACADÉMICO */
+        .diploma-card {
+            background: #ffffff;
+            color: #111111;
+            padding: 40px;
+            border: 12px double #1a365d;
+            border-radius: 4px;
+            text-align: center;
+            font-family: 'Georgia', serif;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            margin-top: 20px;
+        }
+
+        .diploma-header {
+            font-size: 1.6rem;
+            font-weight: bold;
+            color: #1a365d;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 5px;
+        }
+
+        .diploma-subheader {
+            font-size: 1rem;
+            color: #4a5568;
+            border-bottom: 2px solid #1a365d;
+            padding-bottom: 15px;
+            margin-bottom: 25px;
+            font-style: italic;
+        }
+
+        .diploma-certifies {
+            font-size: 0.95rem;
+            color: #718096;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 15px;
+        }
+
+        .diploma-name {
+            font-size: 2.2rem;
+            font-weight: bold;
+            color: #2b6cb0;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+            font-family: 'Times New Roman', serif;
+            border-bottom: 1px solid #cbd5e0;
+            display: inline-block;
+            padding: 0 20px 5px 20px;
+        }
+
+        .diploma-body {
+            font-size: 1.05rem;
+            color: #2d3748;
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+
+        .diploma-score-box {
+            background-color: #f7fafc;
+            border: 2px dashed #2b6cb0;
+            display: inline-block;
+            padding: 15px 30px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+        }
+
+        .diploma-score-title {
+            font-size: 0.85rem;
+            color: #4a5568;
+            text-transform: uppercase;
+            font-weight: bold;
+        }
+
+        .diploma-score-num {
+            font-size: 3rem;
+            font-weight: bold;
+            color: #1a365d;
+            font-family: monospace;
+        }
+
+        .diploma-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-top: 40px;
+            padding-top: 20px;
+            font-size: 0.85rem;
+            color: #718096;
+        }
+
+        .diploma-signature {
+            border-top: 1px solid #a0aec0;
+            width: 200px;
+            padding-top: 5px;
+            text-align: center;
+        }
+
+        @media print {
+            body { background: white; color: black; padding: 0; }
+            .header, .no-print { display: none !important; }
+            .container { max-width: 100%; width: 100%; }
+            .diploma-card { border: 8px double #1a365d; box-shadow: none; margin: 0; padding: 30px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- ENCABEZADO -->
+        <div class="header">
+            <div>
+                <h1 class="title-neon">I.E. Narciso Cabal Salcedo</h1>
+                <p class="subtitle">Evaluación de Funciones | Área de Matemáticas</p>
+            </div>
+            <div class="score-box">
+                <p class="score-label">PUNTAJE ACUMULADO</p>
+                <p id="score-live" class="score-value">0.0</p>
+            </div>
+        </div>
+
+        <!-- REGISTRO DEL ESTUDIANTE -->
+        <div id="setup-area" class="cyber-panel centered">
+            <div class="form-group">
+                <input type="text" id="student-name-input" class="cyber-input" placeholder="NOMBRES Y APELLIDOS COMPLETOS" autocomplete="off">
+
+                <button id="start-btn" class="cyber-btn" disabled>
+                    INICIAR EVALUACIÓN
+                </button>
+            </div>
+        </div>
+
+        <!-- ÁREA DE EVALUACIÓN -->
+        <div id="quiz-area" class="hidden">
+            <div class="cyber-panel">
+                <div class="quiz-header">
+                    <span id="question-count">PREGUNTA 1</span>
+                    <span>ESCALA EVALUATIVA: 0.0 A 5.0</span>
+                </div>
+                <h2 id="question-title" class="question-title"></h2>
+                
+                <div class="chart-container">
+                    <canvas id="main-chart-canvas"></canvas>
+                </div>
+                
+                <div id="options-container" class="options-grid"></div>
+            </div>
+        </div>
+
+        <!-- DIPLOMA FINAL -->
+        <div id="diploma-area" class="hidden"></div>
+    </div>
+
+    <!-- Librería Local Chart.js -->
+    <script src="chart.umd.js"></script>
+    
+    <!-- Banco de Preguntas -->
+    <script src="preguntas.js"></script>
+
+    <script>
+        let preguntasSeleccionadas = [], indexActual = 0, aciertos = 0;
+        let nombreEstudiante = "";
+        let myChartInstance = null;
+
+        const nameInput = document.getElementById('student-name-input');
+        const startBtn = document.getElementById('start-btn');
+
+        function validarFormulario() {
+            startBtn.disabled = !(nameInput.value.trim().length >= 3);
+        }
+
+        nameInput.oninput = validarFormulario;
+
+        startBtn.onclick = () => {
+            nombreEstudiante = nameInput.value.trim();
+
+            preguntasSeleccionadas = BANCO_PREGUNTAS.sort(() => 0.5 - Math.random());
+            document.getElementById('setup-area').classList.add('hidden');
+            document.getElementById('quiz-area').classList.remove('hidden');
+            
+            renderPregunta();
+        };
+
+        function renderPregunta() {
+            const p = preguntasSeleccionadas[indexActual];
+            document.getElementById('question-count').textContent = `PREGUNTA ${indexActual + 1} DE ${preguntasSeleccionadas.length}`;
+            document.getElementById('question-title').textContent = p.titulo;
+            
+            const optionsDiv = document.getElementById('options-container');
+            optionsDiv.innerHTML = "";
+            
+            p.opciones.forEach(opt => {
+                const b = document.createElement('div');
+                b.className = "answer-chip";
+                b.textContent = opt;
+                b.onclick = () => procesarRespuesta(opt);
+                optionsDiv.appendChild(b);
+            });
+
+            renderizarChartJS(p);
+        }
+
+        function renderizarChartJS(pregunta) {
+            const ctx = document.getElementById('main-chart-canvas').getContext('2d');
+            
+            if (myChartInstance) {
+                myChartInstance.destroy();
+            }
+
+            // Normalización de datos para Chart.js
+            let labels = [];
+            let chartData = [];
+
+            pregunta.datos.forEach((d, i) => {
+                if (Array.isArray(d)) {
+                    labels.push(d[0]);
+                    chartData.push(d[1]);
+                } else {
+                    labels.push(i);
+                    chartData.push(d);
+                }
+            });
+
+            let chartType = 'line';
+            if (pregunta.tipoGrafico === 'column' || pregunta.tipoGrafico === 'bar') {
+                chartType = 'bar';
+            }
+
+            const fillArea = (pregunta.tipoGrafico === 'areaspline' || pregunta.tipoGrafico === 'area');
+
+            myChartInstance = new Chart(ctx, {
+                type: chartType,
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: pregunta.ejeY || 'Valor',
+                        data: chartData,
+                        borderColor: '#00f2ff',
+                        backgroundColor: fillArea ? 'rgba(0, 242, 255, 0.2)' : 'rgba(0, 242, 255, 0.6)',
+                        borderWidth: 2,
+                        fill: fillArea,
+                        tension: 0.3,
+                        pointBackgroundColor: '#00f2ff',
+                        pointRadius: 5
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        x: {
+                            grid: { color: '#222222' },
+                            ticks: { color: '#888888', font: { family: 'monospace' } },
+                            title: { display: true, text: pregunta.ejeX || 'X', color: '#888888' }
+                        },
+                        y: {
+                            grid: { color: '#222222' },
+                            ticks: { color: '#888888', font: { family: 'monospace' } },
+                            title: { display: true, text: pregunta.ejeY || 'Y', color: '#888888' }
+                        }
+                    }
+                }
+            });
+        }
+
+        function procesarRespuesta(seleccion) {
+            if(seleccion === preguntasSeleccionadas[indexActual].correcta) aciertos++;
+            document.getElementById('score-live').textContent = (aciertos * (5 / preguntasSeleccionadas.length)).toFixed(1);
+            
+            indexActual++;
+            if(indexActual < preguntasSeleccionadas.length) {
+                renderPregunta();
+            } else {
+                finalizar();
+            }
+        }
+
+        function finalizar() {
+            const nota = (aciertos * (5 / preguntasSeleccionadas.length)).toFixed(1);
+            const fechaHora = new Date().toLocaleString('es-CO');
+
+            document.getElementById('quiz-area').classList.add('hidden');
+            
+            const diplomaArea = document.getElementById('diploma-area');
+            diplomaArea.classList.remove('hidden');
+
+            diplomaArea.innerHTML = `
+                <div class="diploma-card">
+                    <div class="diploma-header">Institución Educativa Narciso Cabal Salcedo</div>
+                    <div class="diploma-subheader">Guadalajara de Buga, Valle del Cauca</div>
+                    
+                    <div class="diploma-certifies">HACE CONSTAR QUE EL/LA ESTUDIANTE</div>
+                    <div class="diploma-name">${nombreEstudiante}</div>
+                    
+                    <div class="diploma-body">
+                        Ha completado satisfactoriamente la evaluación práctica en la plataforma interactiva de <strong>Funciones Matemáticas</strong>.
+                    </div>
+
+                    <div class="diploma-score-box">
+                        <div class="diploma-score-title">Calificación Definitiva</div>
+                        <div class="diploma-score-num">${nota} / 5.0</div>
+                    </div>
+
+                    <div class="diploma-footer">
+                        <div>
+                            <strong>Fecha de Expedición:</strong><br>${fechaHora}
+                        </div>
+                        <div class="diploma-signature">
+                            Área de Matemáticas
+                        </div>
+                    </div>
+                </div>
+
+                <div class="no-print" style="margin-top: 25px; display: flex; gap: 15px; justify-content: center;">
+                    <button onclick="window.print()" class="cyber-btn" style="max-width: 250px;">IMPRIMIR / GUARDAR PDF</button>
+                    <button onclick="location.reload()" class="cyber-btn" style="max-width: 250px; background-color: #333; color: #fff;">NUEVO EXAMEN</button>
+                </div>
+            `;
+        }
+    </script>
+</body>
+</html>

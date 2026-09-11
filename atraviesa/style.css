@@ -1,0 +1,422 @@
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Quicksand:wght@500;700&display=swap');
+
+body {
+    font-family: 'Quicksand', sans-serif;
+    background-color: #0b0f19;
+    color: #e2e8f0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    padding: 20px;
+    box-sizing: border-box;
+    overflow-x: hidden;
+    position: relative;
+}
+
+/* Fondo espacial animado con estrellas */
+.space-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(ellipse at bottom, #1b2735 0%, #090a0f 100%);
+    z-index: -1;
+}
+
+.game-header {
+    text-align: center;
+    margin-bottom: 25px;
+    z-index: 10;
+}
+
+h1 {
+    font-family: 'Orbitron', sans-serif;
+    color: #00ffff;
+    text-shadow: 0 0 15px rgba(0, 255, 255, 0.5);
+    font-size: 2rem;
+    margin: 0 0 10px 0;
+    letter-spacing: 1px;
+}
+
+.player-status-hidden {
+    display: none;
+}
+
+#player-status {
+    font-size: 1.1rem;
+    color: #a5b4fc;
+    font-family: 'Orbitron', sans-serif;
+}
+
+#player-status span {
+    color: #38bdf8;
+    font-weight: bold;
+}
+
+#game-board {
+    display: grid;
+    grid-template-columns: repeat(8, 105px);
+    grid-template-rows: repeat(3, 145px);
+    gap: 12px;
+    perspective: 1200px;
+    z-index: 10;
+}
+
+.card {
+    width: 105px;
+    height: 145px;
+    position: relative;
+    transform-style: preserve-3d;
+    transition: transform 0.6s cubic-bezier(0.4, 0.2, 0.2, 1);
+    cursor: pointer;
+}
+
+.card:hover:not(.disabled) {
+    transform: translateY(-5px);
+    filter: drop-shadow(0 0 10px rgba(56, 189, 248, 0.6));
+}
+
+.card.flipped {
+    transform: rotateY(180deg);
+}
+
+.card-face {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    border-radius: 12px;
+    box-shadow: 0 6px 12px rgba(0,0,0,0.4);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    box-sizing: border-box;
+    border: 2px solid rgba(255, 255, 255, 0.1);
+}
+
+.card-front {
+    background: linear-gradient(135deg, #1e1b4b 0%, #312e81 100%);
+    color: #f8fafc;
+    border-color: #4338ca;
+}
+
+.card-icon {
+    font-size: 32px;
+    margin-bottom: 5px;
+    animation: floatIcon 3s ease-in-out infinite;
+}
+
+.card-number {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 12px;
+    color: #93c5fd;
+    letter-spacing: 1px;
+}
+
+@keyframes floatIcon {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-4px); }
+}
+
+.card-back {
+    background: #1e293b;
+    color: #f1f5f9;
+    transform: rotateY(180deg);
+    padding: 10px;
+    font-weight: bold;
+    font-size: 15px;
+    border-color: #475569;
+}
+
+.card-back.correct {
+    background: linear-gradient(135deg, #065f46 0%, #047857 100%);
+    color: #ecfdf5;
+    border-color: #10b981;
+    font-size: 14px;
+}
+
+.card-back.incorrect {
+    background: linear-gradient(135deg, #7f1d1d 0%, #991b1b 100%);
+    color: #fef2f2;
+    border-color: #ef4444;
+    font-size: 14px;
+}
+
+.card.disabled {
+    pointer-events: none;
+    opacity: 0.35;
+    filter: grayscale(40%);
+}
+
+/* Modales estilo futurista */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(5, 7, 15, 0.85);
+    backdrop-filter: blur(8px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 100;
+}
+
+.cosmic-modal {
+    background: linear-gradient(145deg, #111827 0%, #1f2937 100%);
+    border: 2px solid #374151;
+    box-shadow: 0 0 30px rgba(59, 130, 246, 0.3);
+    padding: 35px;
+    border-radius: 20px;
+    width: 90%;
+    max-width: 520px;
+    text-align: center;
+    color: #f3f4f6;
+}
+
+.modal-icon {
+    font-size: 48px;
+    margin-bottom: 10px;
+}
+
+.modal-badge {
+    display: inline-block;
+    background: #1e3a8a;
+    color: #93c5fd;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 11px;
+    padding: 4px 12px;
+    border-radius: 20px;
+    margin-bottom: 15px;
+    letter-spacing: 1px;
+}
+
+.cosmic-modal h2, .cosmic-modal h3 {
+    font-family: 'Orbitron', sans-serif;
+    color: #60a5fa;
+    margin-bottom: 15px;
+}
+
+.cosmic-modal h3 {
+    font-size: 1.1rem;
+    line-height: 1.5;
+    color: #f3f4f6;
+}
+
+#player-name-input {
+    width: 85%;
+    padding: 14px;
+    margin: 20px 0;
+    font-size: 16px;
+    background-color: #0b0f19;
+    border: 2px solid #3b82f6;
+    color: #ffffff;
+    border-radius: 10px;
+    text-align: center;
+    font-family: 'Quicksand', sans-serif;
+}
+
+#player-name-input:focus {
+    outline: none;
+    box-shadow: 0 0 10px rgba(59, 130, 246, 0.6);
+}
+
+.cosmic-btn {
+    padding: 14px 28px;
+    background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    font-family: 'Orbitron', sans-serif;
+    letter-spacing: 1px;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.4);
+}
+
+.cosmic-btn:hover {
+    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+    transform: scale(1.03);
+    box-shadow: 0 6px 16px rgba(59, 130, 246, 0.6);
+}
+
+.cosmic-btn.secondary {
+    background: linear-gradient(135deg, #4b5563 0%, #374151 100%);
+    box-shadow: 0 4px 12px rgba(75, 85, 99, 0.4);
+}
+
+.cosmic-btn.secondary:hover {
+    background: linear-gradient(135deg, #6b7280 0%, #4b5563 100%);
+}
+
+#answer-options button {
+    display: block;
+    width: 100%;
+    padding: 12px 15px;
+    margin: 10px 0;
+    border: 2px solid #374151;
+    border-radius: 10px;
+    cursor: pointer;
+    background-color: #111827;
+    color: #e5e7eb;
+    font-size: 16px;
+    font-family: 'Quicksand', sans-serif;
+    font-weight: 600;
+    text-align: left;
+    transition: all 0.2s;
+}
+
+#answer-options button:hover {
+    border-color: #60a5fa;
+    background-color: #1f2937;
+}
+
+#answer-options button.selected {
+    background: linear-gradient(135deg, #1d4ed8 0%, #1e40af 100%);
+    color: white;
+    border-color: #60a5fa;
+    box-shadow: 0 0 10px rgba(96, 165, 250, 0.4);
+}
+
+#feedback-text {
+    margin-top: 15px;
+    font-weight: bold;
+    color: #f87171;
+}
+
+.modal-hidden {
+    display: none !important;
+}
+
+/* Estilos para el Diploma Galáctico */
+.certificate-content {
+    max-width: 680px;
+    background-color: #0f172a;
+    padding: 25px;
+    border: 2px solid #f59e0b;
+}
+
+.certificate-border {
+    border: 4px double #f59e0b;
+    padding: 30px;
+    background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+    border-radius: 6px;
+    text-align: center;
+}
+
+.certificate-header h2 {
+    font-family: 'Orbitron', serif;
+    color: #fbbf24;
+    letter-spacing: 2px;
+    font-size: 1.3rem;
+    margin-bottom: 5px;
+}
+
+.certificate-header p {
+    color: #94a3b8;
+}
+
+#cert-player-name {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 28px;
+    color: #38bdf8;
+    margin: 25px 0;
+    text-shadow: 0 0 10px rgba(56, 189, 248, 0.4);
+}
+
+.certificate-body {
+    font-size: 15px;
+    color: #cbd5e1;
+    line-height: 1.7;
+    margin-bottom: 30px;
+}
+
+.certificate-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-top: 30px;
+    color: #94a3b8;
+    font-size: 14px;
+}
+
+.signature hr {
+    border: none;
+    border-top: 1px solid #64748b;
+    width: 180px;
+    margin-bottom: 5px;
+}
+
+.certificate-actions {
+    margin-top: 25px;
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+}
+
+/* Adaptación Responsive para Móviles */
+@media (max-width: 900px) {
+    #game-board {
+        grid-template-columns: repeat(3, 1fr);
+        grid-template-rows: repeat(8, 75px);
+        gap: 8px;
+        width: 100%;
+        max-width: 380px;
+    }
+    .card {
+        width: auto;
+        height: 75px;
+    }
+    .card-icon {
+        font-size: 20px;
+        margin-bottom: 2px;
+    }
+    .card-number {
+        font-size: 10px;
+    }
+    h1 {
+        font-size: 1.4rem;
+    }
+}
+
+/* Ajustes de Impresión */
+@media print {
+    body * {
+        visibility: hidden;
+    }
+    #certificate-modal, #certificate-modal * {
+        visibility: visible;
+    }
+    #certificate-modal {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background: white;
+    }
+    .certificate-content {
+        background: white;
+        border: none;
+    }
+    .certificate-border {
+        background: #fffdf9;
+        border: 4px double #000;
+    }
+    .certificate-header h2, #cert-player-name, .certificate-body, .certificate-footer {
+        color: #000 !important;
+        text-shadow: none !important;
+    }
+    .certificate-actions {
+        display: none;
+    }
+}

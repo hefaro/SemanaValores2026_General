@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Certificado de Auditoría y Desempeño</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #050505;
+            color: #1a202c;
+            font-family: 'Georgia', serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 1rem;
+        }
+
+        .diploma-card {
+            background: #ffffff;
+            border: 6px double #0f766e;
+            border-radius: 12px;
+            padding: 2.5rem 2rem;
+            max-width: 500px;
+            width: 100%;
+            text-align: center;
+            position: relative;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+        }
+
+        .diploma-card h3 {
+            font-size: 1.4rem;
+            color: #0f766e;
+            margin: 0 0 0.5rem 0;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-family: 'Courier New', Courier, monospace;
+            font-weight: bold;
+        }
+
+        .diploma-subtitulo {
+            font-size: 0.8rem;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.5rem;
+        }
+
+        .diploma-nombre {
+            font-size: 1.35rem;
+            font-weight: bold;
+            color: #111827;
+            border-bottom: 2px solid #0f766e;
+            display: inline-block;
+            padding: 0 1rem 0.2rem 1rem;
+            margin: 0.75rem 0 !important;
+            word-break: break-word;
+        }
+
+        .diploma-texto {
+            margin: 0.5rem 0;
+            font-size: 0.9rem;
+            color: #334155;
+            line-height: 1.4;
+        }
+
+        .diploma-juego {
+            font-weight: bold;
+            color: #0f766e;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.95rem;
+        }
+
+        .diploma-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-top: 1.5rem;
+            padding-top: 1rem;
+            border-top: 1px dashed #cbd5e1;
+            font-size: 0.8rem;
+            color: #475569;
+        }
+
+        .panel-acciones {
+            margin-top: 1.5rem;
+            display: flex;
+            gap: 0.75rem;
+            width: 100%;
+            max-width: 500px;
+            justify-content: center;
+        }
+
+        .btn-accion {
+            background-color: #06b6d4;
+            color: #000;
+            border: none;
+            padding: 0.75rem 1.25rem;
+            border-radius: 0.5rem;
+            font-weight: bold;
+            cursor: pointer;
+            font-family: 'Courier New', Courier, monospace;
+            transition: background 0.2s;
+            width: 100%;
+            touch-action: manipulation;
+        }
+
+        .btn-accion:hover {
+            background-color: #22d3ee;
+        }
+
+        @media (max-width: 480px) {
+            .diploma-card {
+                padding: 1.5rem 1rem;
+            }
+            .diploma-card h3 {
+                font-size: 1.1rem;
+            }
+            .diploma-nombre {
+                font-size: 1.1rem;
+            }
+        }
+
+        @media print {
+            body {
+                background: white !important;
+                padding: 0;
+            }
+            .panel-acciones {
+                display: none !important;
+            }
+            .diploma-card {
+                box-shadow: none !important;
+                border: 4px solid #0f766e !important;
+                max-width: 100% !important;
+                width: 100% !important;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="diploma-card">
+        <h3>Certificado de Auditoría</h3>
+        <p class="diploma-subtitulo">Otorgado oficialmente a:</p>
+        <p id="diploma-nombre" class="diploma-nombre">Nombre del Estudiante</p>
+        
+        <p class="diploma-texto">
+            Ha completado satisfactoriamente la evaluación matemática de modelado en el módulo:
+        </p>
+        <p id="diploma-juego" class="diploma-juego">Auditoria_Matematica_v1</p>
+        
+        <div class="diploma-grid">
+            <div>
+                <strong>FECHA Y HORA:</strong><br>
+                <span id="diploma-hora">--/--/---- --:--</span>
+            </div>
+            <div>
+                <strong>PUNTUACIÓN:</strong><br>
+                <span id="diploma-score" style="font-weight: bold; color: #0f766e;">5.0 / 5.0</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="panel-acciones">
+        <button onclick="window.print()" class="btn-accion">🖨️ IMPRIMIR / GUARDAR PDF</button>
+    </div>
+
+    <script>
+        function cargarDatosDiploma() {
+            const params = new URLSearchParams(window.location.search);
+            
+            const nombre = params.get('nombre');
+            const juego = params.get('juego');
+            const puntaje = params.get('puntaje');
+            const fecha = params.get('fecha');
+
+            if (nombre) document.getElementById('diploma-nombre').innerText = decodeURIComponent(nombre);
+            if (juego) document.getElementById('diploma-juego').innerText = decodeURIComponent(juego);
+            if (puntaje) document.getElementById('diploma-score').innerText = `${decodeURIComponent(puntaje)} / 5.0`;
+            
+            if (fecha) {
+                document.getElementById('diploma-hora').innerText = decodeURIComponent(fecha);
+            } else {
+                const horaLocal = new Date().toLocaleString('es-CO', { 
+                    dateStyle: 'short', 
+                    timeStyle: 'medium' 
+                });
+                document.getElementById('diploma-hora').innerText = horaLocal;
+            }
+        }
+
+        window.onload = cargarDatosDiploma;
+    </script>
+</body>
+</html>

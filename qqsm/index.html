@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>¿Quién Quiere Ser Millonario? 💰</title>
+    <link rel="stylesheet" href="styles.css">
+
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\\\(', '\\\\)']]
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body>
+
+    <div id="seleccion-jugador-contenedor" class="modal-seleccion">
+        <h1>¡Bienvenido a El Millonario!</h1>
+        <p>Ingresa tu nombre para empezar a jugar.</p>
+
+        <label for="nombre-jugador">Tu Nombre:</label>
+        <input type="text" id="nombre-jugador" placeholder="Ej. Juan Pérez" autocomplete="off">
+        
+        <button id="iniciar-juego-btn-seleccion" disabled>Iniciar Juego</button>
+    </div>
+    
+    <div class="contenedor-juego" style="display:none;">
+        
+        <div class="pregunta-seccion">
+            <div id="pregunta-texto" class="pregunta-texto">
+                Haz clic en "Iniciar Juego" para comenzar.
+            </div>
+            
+            <div class="opciones-contenedor">
+                <button class="opcion" id="opcion-a" data-opcion="A">A: Opción A</button>
+                <button class="opcion" id="opcion-b" data-opcion="B">B: Opción B</button>
+                <button class="opcion" id="opcion-c" data-opcion="C">C: Opción C</button>
+                <button class="opcion" id="opcion-d" data-opcion="D">D: Opción D</button>
+            </div>
+
+            <div class="marcador-contenedor marcador-inferior">
+                <h4>Marcador de Premios</h4>
+                <ul id="marcador-lista"></ul>
+            </div>
+        </div>
+
+        <div class="info-seccion">
+            <div class="comodines-contenedor">
+                <h4>Comodines</h4>
+                <button id="comodin-5050" class="comodin">50:50</button>
+                <button id="comodin-llamada" class="comodin" disabled>Llamada</button>
+                <button id="comodin-publico" class="comodin" disabled>Público</button>
+                
+                <div id="timer-contenedor">
+                    Tiempo: <span id="timer-display">45</span>s
+                </div>
+                
+                <h4 style="margin-top: 10px;">Premio de la Pregunta: <span id="premio-actual">$0</span></h4>
+            </div>
+            
+            <p id="game-status-mensaje" class="status-mensaje"></p>
+        </div>
+    </div>
+    
+    <script src="config.js"></script>
+    <script src="preguntas.js"></script>
+    <script src="Juego.js"></script> 
+
+</body>
+</html>

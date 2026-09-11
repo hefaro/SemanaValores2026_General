@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Desafío de Enteros - Flashcards</title>
+    
+    <!-- Estilos CSS de Tailwind -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Cinzel:wght@700&display=swap" rel="stylesheet">
+    
+    <!-- Librería externa para el Certificado en PDF -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #f1f5f9; perspective: 1000px; min-height: 100vh; }
+        .card-container { width: 100%; height: 180px; }
+        .card { background-color: transparent; width: 100%; height: 100%; cursor: pointer; }
+        .card-inner { position: relative; width: 100%; height: 100%; transition: transform 0.6s; transform-style: preserve-3d; }
+        .card.flipped .card-inner { transform: rotateY(180deg); }
+        .card-front, .card-back { 
+            position: absolute; width: 100%; height: 100%; 
+            backface-visibility: hidden; display: flex; flex-direction: column; 
+            justify-content: center; align-items: center; border-radius: 1rem; 
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1); padding: 0.75rem; 
+        }
+        .card-front { background-color: #4f46e5; color: white; font-weight: 700; font-size: 1.25rem; }
+        .card-back { background-color: white; transform: rotateY(180deg); border: 2px solid #4f46e5; }
+        .card.correct .card-front { background-color: #22c55e; }
+        .card.incorrect .card-front { background-color: #ef4444; }
+        .disabled-card { pointer-events: none; }
+        
+        .answers-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.35rem;
+            width: 100%;
+        }
+        .answer-button { 
+            background-color: #f8fafc; border: 1px solid #cbd5e1; border-radius: 0.375rem; 
+            padding: 0.4rem 0.2rem; width: 100%; font-weight: 600; font-size: 0.85rem; transition: 0.2s;
+            text-align: center;
+        }
+        .answer-button:hover { background-color: #e2e8f0; }
+        .answer-button.correct-opt { background-color: #22c55e !important; color: white !important; border-color: #22c55e !important; }
+        .answer-button.incorrect-opt { background-color: #ef4444 !important; color: white !important; border-color: #ef4444 !important; }
+
+        /* Estilos para el Certificado */
+        .certificado {
+            font-family: 'Cinzel', serif;
+            background: #ffffff;
+            border: 10px solid #1e293b;
+            outline: 4px solid #4f46e5;
+            outline-offset: -14px;
+        }
+    </style>
+</head>
+<body class="p-4 flex flex-col items-center">
+
+    <!-- Pantalla Inicial -->
+    <div id="start-screen" class="w-full max-w-md p-8 bg-white rounded-2xl shadow-xl mt-10">
+        <h1 class="text-3xl font-bold text-indigo-600 text-center mb-6">Operaciones con Enteros</h1>
+        <div class="space-y-4 mb-8">
+            <label class="block text-sm font-semibold text-gray-700">Nombre del Jugador:</label>
+            <input type="text" id="player-name-input" placeholder="Escribe tu nombre completo..." class="w-full p-3 border-2 rounded-xl outline-none focus:ring-2 focus:ring-indigo-500">
+        </div>
+        <button id="start-game-button" class="w-full bg-indigo-600 text-white font-bold py-4 rounded-xl disabled:opacity-50" disabled>¡Iniciar Desafío!</button>
+    </div>
+
+    <!-- Contenedor del Juego -->
+    <div id="game-container" class="w-full max-w-5xl hidden">
+        <div class="flex justify-between items-center mb-6 px-6 py-4 bg-white rounded-2xl shadow-sm">
+            <div><span class="text-xs font-bold text-slate-400">TIEMPO</span><br><span id="timer" class="text-2xl font-black">120s</span></div>
+            <div id="player-display" class="text-lg font-bold text-indigo-600"></div>
+            <div class="text-right"><span class="text-xs font-bold text-slate-400">ACIERTOS</span><br><span id="hits-display" class="text-2xl font-black text-indigo-600">0/16</span></div>
+        </div>
+
+        <!-- Matriz de Cartas (4x4) -->
+        <div id="card-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 md:gap-6"></div>
+
+        <!-- Certificado / Diploma -->
+        <div id="certificate-area" class="hidden mt-8 w-full max-w-2xl mx-auto">
+            <div id="certificado-node" class="certificado p-10 text-center shadow-2xl bg-white relative">
+                <h3 class="text-xl font-semibold text-gray-600 tracking-widest uppercase mb-2">Certificado de Participación</h3>
+                <h2 class="text-3xl font-bold text-indigo-900 mb-6">Desafío de Matemáticas</h2>
+                <p class="text-gray-600 italic mb-2">Otorgado con orgullo a:</p>
+                <div id="cert-nombre" class="text-2xl font-bold text-slate-800 border-b-2 border-indigo-500 inline-block px-8 py-1 mb-6"></div>
+                <p class="text-gray-600 mb-4">Por haber completado la actividad de <strong>Operaciones con Enteros</strong> con la siguiente calificación:</p>
+                
+                <div class="my-4">
+                    <span id="cert-nota" class="text-6xl font-black text-indigo-600">0.0</span>
+                    <span class="text-xl text-gray-500"> / 5.0</span>
+                </div>
+
+                <p id="cert-detalles" class="text-sm text-gray-500 mt-4"></p>
+                
+                <div class="mt-8 pt-4 border-t border-gray-200 text-xs text-gray-400 flex justify-between items-center">
+                    <span id="cert-fecha"></span>
+                    <span>Validación Digital de Resultado</span>
+                </div>
+            </div>
+
+            <div class="text-center mt-6 space-x-4">
+                <button id="download-cert-btn" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-8 rounded-full shadow-lg transition">Descargar Certificado (PDF)</button>
+                <button id="restart-button" class="bg-slate-800 hover:bg-slate-900 text-white font-bold py-3 px-8 rounded-full shadow-lg transition">Volver a Jugar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Archivo del Banco de Preguntas -->
+    <script src="preguntas.js"></script>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const TIEMPO_MAX = 120, TOTAL_JUEGO = 16;
+        let nombreJugador = '', aciertos = 0, tiempo = TIEMPO_MAX, activo = false, timer, respondidas = 0, cartaVisible = null;
+
+        const nameInput = document.getElementById('player-name-input');
+        const startBtn = document.getElementById('start-game-button');
+        const grid = document.getElementById('card-grid');
+
+        nameInput.oninput = (e) => {
+            nombreJugador = e.target.value.trim();
+            startBtn.disabled = nombreJugador.length < 2;
+        };
+
+        function finalizar() {
+            activo = false; 
+            clearInterval(timer);
+            
+            const notaAciertos = (aciertos / TOTAL_JUEGO) * 4.5;
+            const bonoTiempo = aciertos > 0 ? (tiempo / TIEMPO_MAX) * 0.5 : 0;
+            let nota = (notaAciertos + bonoTiempo).toFixed(1);
+            if (parseFloat(nota) > 5.0) nota = "5.0"; 
+            if (aciertos === 0) nota = "0.0";
+
+            const tiempoEmpleado = TIEMPO_MAX - tiempo;
+
+            grid.classList.add('hidden');
+
+            document.getElementById('cert-nombre').textContent = nombreJugador;
+            document.getElementById('cert-nota').textContent = nota;
+            document.getElementById('cert-detalles').textContent = `Aciertos: ${aciertos} de ${TOTAL_JUEGO} | Tiempo empleado: ${tiempoEmpleado} segundos`;
+            document.getElementById('cert-fecha').textContent = `Fecha: ${new Date().toLocaleDateString('es-CO')}`;
+
+            document.getElementById('certificate-area').classList.remove('hidden');
+        }
+
+        function crearCarta(info) {
+            const div = document.createElement('div');
+            div.className = 'card-container';
+            div.innerHTML = `
+                <div class="card">
+                    <div class="card-inner">
+                        <div class="card-front">${info.question}</div>
+                        <div class="card-back">
+                            <div class="answers-grid">
+                                ${info.options.map((opt, i) => `<button class="answer-button" data-idx="${i}">${opt}</button>`).join('')}
+                            </div>
+                        </div>
+                    </div>
+                </div>`;
+            
+            const card = div.querySelector('.card');
+            const btns = div.querySelectorAll('.answer-button');
+
+            btns.forEach(btn => {
+                btn.onclick = (e) => {
+                    e.stopPropagation();
+                    if (!activo || card.classList.contains('correct') || card.classList.contains('incorrect')) return;
+                    
+                    const idx = parseInt(btn.dataset.idx);
+                    if (idx === info.correctIndex) {
+                        card.classList.add('correct', 'disabled-card');
+                        btn.classList.add('correct-opt');
+                        aciertos++;
+                        card.querySelector('.card-front').innerHTML = "✓";
+                    } else {
+                        card.classList.add('incorrect', 'disabled-card');
+                        btn.classList.add('incorrect-opt');
+                        btns[info.correctIndex].classList.add('correct-opt');
+                        card.querySelector('.card-front').innerHTML = "✗";
+                    }
+                    respondidas++;
+                    document.getElementById('hits-display').textContent = `${aciertos}/${TOTAL_JUEGO}`;
+                    setTimeout(() => { card.classList.remove('flipped'); cartaVisible = null; }, 800);
+                    if (respondidas >= TOTAL_JUEGO) finalizar();
+                };
+            });
+
+            card.onclick = () => {
+                if (!activo || card.classList.contains('correct') || card.classList.contains('incorrect')) return;
+                if (cartaVisible && cartaVisible !== card) cartaVisible.classList.remove('flipped');
+                card.classList.add('flipped');
+                cartaVisible = card;
+            };
+            return div;
+        }
+
+        startBtn.onclick = () => {
+            document.getElementById('start-screen').classList.add('hidden');
+            document.getElementById('game-container').classList.remove('hidden');
+            document.getElementById('player-display').textContent = nombreJugador;
+            
+            grid.innerHTML = '';
+            
+            // Elección aleatoria de 16 preguntas del banco total de 40
+            const seleccionadas = [...cardData].sort(() => 0.5 - Math.random()).slice(0, TOTAL_JUEGO);
+            
+            seleccionadas.forEach(q => {
+                grid.appendChild(crearCarta(q));
+            });
+            
+            activo = true;
+            timer = setInterval(() => { 
+                tiempo--; 
+                document.getElementById('timer').textContent = `${tiempo}s`; 
+                if (tiempo <= 0) finalizar(); 
+            }, 1000);
+        };
+
+        // Exportación PDF del Certificado
+        document.getElementById('download-cert-btn').onclick = () => {
+            const element = document.getElementById('certificado-node');
+            const opt = {
+                margin:       0.5,
+                filename:     `Certificado_${nombreJugador.replace(/\s+/g, '_')}.pdf`,
+                image:        { type: 'jpeg', quality: 0.98 },
+                html2canvas:  { scale: 2 },
+                jsPDF:        { unit: 'in', format: 'letter', orientation: 'landscape' }
+            };
+            html2pdf().set(opt).from(element).save();
+        };
+
+        document.getElementById('restart-button').onclick = () => location.reload();
+    });
+    </script>
+</body>
+</html>

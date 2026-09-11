@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Desafío Matemático Galáctico</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Carga de MathJax para formato matemático LaTeX -->
+    <script>
+        window.MathJax = {
+            tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] },
+            svg: { fontCache: 'global' }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body>
+
+    <div class="space-background"></div>
+
+    <header class="game-header">
+        <h1>🚀 Desafío Matemático Galáctico 🌌</h1>
+        <p id="player-status" class="player-status-hidden">Cadete: <span id="display-name"></span></p>
+    </header>
+
+    <main>
+        <div id="game-board"></div>
+    </main>
+
+    <!-- Modal para el ingreso del nombre -->
+    <div id="start-modal" class="modal">
+        <div class="modal-content cosmic-modal">
+            <div class="modal-icon">🛸</div>
+            <h2>Misión Espacial Matemática</h2>
+            <p>Ingresa tu nombre, cadete, para iniciar la travesía estelar:</p>
+            <input type="text" id="player-name-input" placeholder="Nombre completo" autocomplete="off" />
+            <button id="start-game-btn" class="cosmic-btn">¡Despegar 🚀!</button>
+        </div>
+    </div>
+
+    <!-- Modal para las preguntas -->
+    <div id="question-modal" class="modal modal-hidden">
+        <div class="modal-content cosmic-modal">
+            <div class="modal-badge">⚠️ Ancla Estelar Detectada</div>
+            <h3 id="question-text"></h3>
+            <div id="answer-options"></div>
+            <button id="submit-answer" class="cosmic-btn">Transmitir Respuesta 📡</button>
+            <p id="feedback-text"></p>
+        </div>
+    </div>
+
+    <!-- Contenedor del Diploma -->
+    <div id="certificate-modal" class="modal modal-hidden">
+        <div class="modal-content certificate-content">
+            <div class="certificate-border" id="certificate-to-print">
+                <div class="certificate-header">
+                    <h2>🌟 DIPLOMA DE COMANDANTE ESTELAR 🌟</h2>
+                    <p>Otorgado con orgullo a:</p>
+                </div>
+                <h1 id="cert-player-name">Nombre del Estudiante</h1>
+                <p class="certificate-body">
+                    Por haber superado exitosamente todas las coordenadas de razonamiento matemático en la misión espacial, demostrando agilidad mental, destreza y brillantez en el cosmos del <strong>Desafío Matemático</strong>.
+                </p>
+                <div class="certificate-footer">
+                    <div class="signature">
+                        <hr>
+                        <p>Control de Misión (Docente)</p>
+                    </div>
+                    <div class="date-container">
+                        <p id="cert-date"></p>
+                    </div>
+                </div>
+            </div>
+            <div class="certificate-actions">
+                <button id="print-cert-btn" class="cosmic-btn">🖨️ Imprimir Diploma</button>
+                <button id="restart-game-btn" class="cosmic-btn secondary">🔄 Nueva Misión</button>
+            </div>
+        </div>
+    </div>
+	<script src="preguntas.js"></script>
+   	 <script src="script.js"></script>
+</body>
+</html>
