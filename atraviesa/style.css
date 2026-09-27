@@ -1,9 +1,6 @@
-@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Quicksand:wght@500;700&display=swap');
-
 body {
-    font-family: 'Quicksand', sans-serif;
-    background-color: #0b0f19;
-    color: #e2e8f0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f0f8ff;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -12,72 +9,29 @@ body {
     margin: 0;
     padding: 20px;
     box-sizing: border-box;
-    overflow-x: hidden;
-    position: relative;
-}
-
-/* Fondo espacial animado con estrellas */
-.space-background {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: radial-gradient(ellipse at bottom, #1b2735 0%, #090a0f 100%);
-    z-index: -1;
-}
-
-.game-header {
-    text-align: center;
-    margin-bottom: 25px;
-    z-index: 10;
 }
 
 h1 {
-    font-family: 'Orbitron', sans-serif;
-    color: #00ffff;
-    text-shadow: 0 0 15px rgba(0, 255, 255, 0.5);
-    font-size: 2rem;
-    margin: 0 0 10px 0;
-    letter-spacing: 1px;
-}
-
-.player-status-hidden {
-    display: none;
-}
-
-#player-status {
-    font-size: 1.1rem;
-    color: #a5b4fc;
-    font-family: 'Orbitron', sans-serif;
-}
-
-#player-status span {
-    color: #38bdf8;
-    font-weight: bold;
+    color: #2c3e50;
+    text-align: center;
+    margin-bottom: 20px;
 }
 
 #game-board {
     display: grid;
-    grid-template-columns: repeat(8, 105px);
-    grid-template-rows: repeat(3, 145px);
-    gap: 12px;
-    perspective: 1200px;
-    z-index: 10;
+    grid-template-columns: repeat(8, 100px);
+    grid-template-rows: repeat(3, 140px);
+    gap: 10px;
+    perspective: 1000px;
 }
 
 .card {
-    width: 105px;
-    height: 145px;
+    width: 100px;
+    height: 140px;
     position: relative;
     transform-style: preserve-3d;
-    transition: transform 0.6s cubic-bezier(0.4, 0.2, 0.2, 1);
+    transition: transform 0.6s;
     cursor: pointer;
-}
-
-.card:hover:not(.disabled) {
-    transform: translateY(-5px);
-    filter: drop-shadow(0 0 10px rgba(56, 189, 248, 0.6));
 }
 
 .card.flipped {
@@ -89,277 +43,180 @@ h1 {
     width: 100%;
     height: 100%;
     backface-visibility: hidden;
-    border-radius: 12px;
-    box-shadow: 0 6px 12px rgba(0,0,0,0.4);
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
     display: flex;
-    flex-direction: column;
     justify-content: center;
     align-items: center;
     text-align: center;
+    color: white;
     box-sizing: border-box;
-    border: 2px solid rgba(255, 255, 255, 0.1);
+    padding: 8px;
 }
 
+/* Cara superior / frontal (donde aparece la abejita) */
 .card-front {
-    background: linear-gradient(135deg, #1e1b4b 0%, #312e81 100%);
-    color: #f8fafc;
-    border-color: #4338ca;
+    background: linear-gradient(135deg, #f1c40f, #f39c12);
+    border: 3px solid #d35400;
 }
 
-.card-icon {
-    font-size: 32px;
-    margin-bottom: 5px;
-    animation: floatIcon 3s ease-in-out infinite;
-}
-
-.card-number {
-    font-family: 'Orbitron', sans-serif;
-    font-size: 12px;
-    color: #93c5fd;
-    letter-spacing: 1px;
-}
-
-@keyframes floatIcon {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-4px); }
+/* Icono o imagen de la abejita escalado adecuadamente */
+.card-front .bee-icon, .card-front img {
+    width: 60px;
+    height: 60px;
+    max-width: 80%;
+    max-height: 80%;
+    object-fit: contain;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
 }
 
 .card-back {
-    background: #1e293b;
-    color: #f1f5f9;
+    background: #ffffff;
+    color: #333;
     transform: rotateY(180deg);
-    padding: 10px;
     font-weight: bold;
-    font-size: 15px;
-    border-color: #475569;
+    font-size: 20px;
 }
 
 .card-back.correct {
-    background: linear-gradient(135deg, #065f46 0%, #047857 100%);
-    color: #ecfdf5;
-    border-color: #10b981;
-    font-size: 14px;
+    background-color: #2ecc71;
+    color: white;
 }
 
 .card-back.incorrect {
-    background: linear-gradient(135deg, #7f1d1d 0%, #991b1b 100%);
-    color: #fef2f2;
-    border-color: #ef4444;
-    font-size: 14px;
+    background-color: #e74c3c;
+    color: white;
 }
 
 .card.disabled {
     pointer-events: none;
-    opacity: 0.35;
-    filter: grayscale(40%);
+    opacity: 0.5;
 }
 
-/* Modales estilo futurista */
+/* Modales */
 .modal {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(5, 7, 15, 0.85);
-    backdrop-filter: blur(8px);
+    background-color: rgba(0, 0, 0, 0.75);
     display: flex;
     justify-content: center;
     align-items: center;
     z-index: 100;
 }
 
-.cosmic-modal {
-    background: linear-gradient(145deg, #111827 0%, #1f2937 100%);
-    border: 2px solid #374151;
-    box-shadow: 0 0 30px rgba(59, 130, 246, 0.3);
-    padding: 35px;
-    border-radius: 20px;
+.modal-content {
+    background-color: white;
+    padding: 30px;
+    border-radius: 12px;
     width: 90%;
-    max-width: 520px;
+    max-width: 500px;
     text-align: center;
-    color: #f3f4f6;
-}
-
-.modal-icon {
-    font-size: 48px;
-    margin-bottom: 10px;
-}
-
-.modal-badge {
-    display: inline-block;
-    background: #1e3a8a;
-    color: #93c5fd;
-    font-family: 'Orbitron', sans-serif;
-    font-size: 11px;
-    padding: 4px 12px;
-    border-radius: 20px;
-    margin-bottom: 15px;
-    letter-spacing: 1px;
-}
-
-.cosmic-modal h2, .cosmic-modal h3 {
-    font-family: 'Orbitron', sans-serif;
-    color: #60a5fa;
-    margin-bottom: 15px;
-}
-
-.cosmic-modal h3 {
-    font-size: 1.1rem;
-    line-height: 1.5;
-    color: #f3f4f6;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
 }
 
 #player-name-input {
-    width: 85%;
-    padding: 14px;
-    margin: 20px 0;
+    width: 80%;
+    padding: 10px;
+    margin: 15px 0;
     font-size: 16px;
-    background-color: #0b0f19;
-    border: 2px solid #3b82f6;
-    color: #ffffff;
-    border-radius: 10px;
+    border: 2px solid #3498db;
+    border-radius: 6px;
     text-align: center;
-    font-family: 'Quicksand', sans-serif;
 }
 
-#player-name-input:focus {
-    outline: none;
-    box-shadow: 0 0 10px rgba(59, 130, 246, 0.6);
-}
-
-.cosmic-btn {
-    padding: 14px 28px;
-    background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+#start-game-btn, #submit-answer, .certificate-actions button {
+    padding: 12px 25px;
+    background-color: #2ecc71;
     color: white;
     border: none;
-    border-radius: 10px;
+    border-radius: 6px;
     cursor: pointer;
     font-size: 16px;
     font-weight: bold;
-    font-family: 'Orbitron', sans-serif;
-    letter-spacing: 1px;
-    transition: all 0.2s ease;
-    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.4);
+    transition: background 0.2s;
 }
 
-.cosmic-btn:hover {
-    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
-    transform: scale(1.03);
-    box-shadow: 0 6px 16px rgba(59, 130, 246, 0.6);
-}
-
-.cosmic-btn.secondary {
-    background: linear-gradient(135deg, #4b5563 0%, #374151 100%);
-    box-shadow: 0 4px 12px rgba(75, 85, 99, 0.4);
-}
-
-.cosmic-btn.secondary:hover {
-    background: linear-gradient(135deg, #6b7280 0%, #4b5563 100%);
+#start-game-btn:hover, #submit-answer:hover, .certificate-actions button:hover {
+    background-color: #27ae60;
 }
 
 #answer-options button {
     display: block;
     width: 100%;
-    padding: 12px 15px;
-    margin: 10px 0;
-    border: 2px solid #374151;
-    border-radius: 10px;
+    padding: 12px;
+    margin: 8px 0;
+    border: 1px solid #ccc;
+    border-radius: 6px;
     cursor: pointer;
-    background-color: #111827;
-    color: #e5e7eb;
-    font-size: 16px;
-    font-family: 'Quicksand', sans-serif;
-    font-weight: 600;
-    text-align: left;
-    transition: all 0.2s;
-}
-
-#answer-options button:hover {
-    border-color: #60a5fa;
-    background-color: #1f2937;
+    background-color: #f9f9f9;
+    font-size: 18px;
 }
 
 #answer-options button.selected {
-    background: linear-gradient(135deg, #1d4ed8 0%, #1e40af 100%);
+    background-color: #3498db;
     color: white;
-    border-color: #60a5fa;
-    box-shadow: 0 0 10px rgba(96, 165, 250, 0.4);
-}
-
-#feedback-text {
-    margin-top: 15px;
-    font-weight: bold;
-    color: #f87171;
+    border-color: #2980b9;
 }
 
 .modal-hidden {
     display: none !important;
 }
 
-/* Estilos para el Diploma Galáctico */
+/* Estilos para el Diploma */
 .certificate-content {
-    max-width: 680px;
-    background-color: #0f172a;
-    padding: 25px;
-    border: 2px solid #f59e0b;
+    max-width: 650px;
+    background-color: #fff;
+    padding: 20px;
 }
 
 .certificate-border {
-    border: 4px double #f59e0b;
+    border: 8px double #1a365d;
     padding: 30px;
-    background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
-    border-radius: 6px;
-    text-align: center;
+    background-color: #fffdf9;
+    border-radius: 4px;
 }
 
 .certificate-header h2 {
-    font-family: 'Orbitron', serif;
-    color: #fbbf24;
+    font-family: 'Georgia', serif;
+    color: #1a365d;
     letter-spacing: 2px;
-    font-size: 1.3rem;
     margin-bottom: 5px;
 }
 
-.certificate-header p {
-    color: #94a3b8;
-}
-
 #cert-player-name {
-    font-family: 'Orbitron', sans-serif;
-    font-size: 28px;
-    color: #38bdf8;
-    margin: 25px 0;
-    text-shadow: 0 0 10px rgba(56, 189, 248, 0.4);
+    font-family: 'Georgia', serif;
+    font-size: 32px;
+    color: #b7791f;
+    margin: 20px 0;
+    text-decoration: underline;
 }
 
 .certificate-body {
-    font-size: 15px;
-    color: #cbd5e1;
-    line-height: 1.7;
-    margin-bottom: 30px;
+    font-size: 16px;
+    color: #4a5568;
+    line-height: 1.6;
 }
 
 .certificate-footer {
     display: flex;
     justify-content: space-between;
     align-items: flex-end;
-    margin-top: 30px;
-    color: #94a3b8;
-    font-size: 14px;
+    margin-top: 40px;
 }
 
 .signature hr {
     border: none;
-    border-top: 1px solid #64748b;
+    border-top: 1px solid #718096;
     width: 180px;
-    margin-bottom: 5px;
 }
 
 .certificate-actions {
-    margin-top: 25px;
+    margin-top: 20px;
     display: flex;
-    gap: 15px;
+    gap: 10px;
     justify-content: center;
 }
 
@@ -367,24 +224,21 @@ h1 {
 @media (max-width: 900px) {
     #game-board {
         grid-template-columns: repeat(3, 1fr);
-        grid-template-rows: repeat(8, 75px);
+        grid-template-rows: repeat(8, 80px);
         gap: 8px;
         width: 100%;
-        max-width: 380px;
+        max-width: 400px;
     }
     .card {
         width: auto;
-        height: 75px;
+        height: 80px;
     }
-    .card-icon {
-        font-size: 20px;
-        margin-bottom: 2px;
+    .card-front .bee-icon, .card-front img {
+        width: 40px;
+        height: 40px;
     }
-    .card-number {
-        font-size: 10px;
-    }
-    h1 {
-        font-size: 1.4rem;
+    .card-face {
+        font-size: 14px;
     }
 }
 
@@ -402,21 +256,96 @@ h1 {
         top: 0;
         width: 100%;
         height: 100%;
-        background: white;
-    }
-    .certificate-content {
-        background: white;
-        border: none;
-    }
-    .certificate-border {
-        background: #fffdf9;
-        border: 4px double #000;
-    }
-    .certificate-header h2, #cert-player-name, .certificate-body, .certificate-footer {
-        color: #000 !important;
-        text-shadow: none !important;
+        background: none;
     }
     .certificate-actions {
         display: none;
     }
+    .certificate-border {
+        border: 4px double #000;
+    }
 }
+
+
+/* Botón de Ayuda Flotante */
+.help-btn {
+    position: fixed;
+    top: 15px;
+    right: 15px;
+    background-color: #f1c40f;
+    color: #2c3e50;
+    border: 2px solid #d35400;
+    border-radius: 20px;
+    padding: 8px 16px;
+    font-weight: bold;
+    font-size: 15px;
+    cursor: pointer;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.2);
+    z-index: 10;
+    transition: transform 0.2s, background-color 0.2s;
+}
+
+.help-btn:hover {
+    background-color: #f39c12;
+    transform: scale(1.05);
+}
+
+/* Modal de Instrucciones */
+.instructions-modal-content {
+    text-align: left;
+    max-width: 550px;
+}
+
+.instructions-modal-content h2 {
+    text-align: center;
+    color: #2c3e50;
+}
+
+.instructions-list {
+    padding-left: 20px;
+    line-height: 1.6;
+    color: #4a5568;
+}
+
+.instructions-list li {
+    margin-bottom: 12px;
+}
+
+#close-instructions-btn {
+    display: block;
+    margin: 20px auto 0 auto;
+    padding: 10px 25px;
+    background-color: #3498db;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+#close-instructions-btn:hover {
+    background-color: #2980b9;
+}
+4. Archivo script.js (Actualizaciones JS)
+Añade las referencias de los botones e interactividad para abrir y cerrar las instrucciones sin interferir con la partida actual:
+
+JavaScript
+// Agregar dentro de document.addEventListener('DOMContentLoaded', () => { ... })
+
+// Referencias a elementos de Instrucciones
+const openInstructionsBtn = document.getElementById('open-instructions-btn');
+const closeInstructionsBtn = document.getElementById('close-instructions-btn');
+const instructionsModal = document.getElementById('instructions-modal');
+
+// Abrir Modal de Instrucciones
+openInstructionsBtn.addEventListener('click', () => {
+    instructionsModal.classList.remove('modal-hidden');
+    if (window.MathJax) {
+        MathJax.typesetPromise([instructionsModal]);
+    }
+});
+
+// Cerrar Modal de Instrucciones
+closeInstructionsBtn.addEventListener('click', () => {
+    instructionsModal.classList.add('modal-hidden');
+});
