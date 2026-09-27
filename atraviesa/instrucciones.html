@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reglas - Desafío Mente Crítica</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body {
+            background-color: #0f172a;
+            color: #f8fafc;
+            padding: 20px;
+            display: block;
+        }
+        .instructions-container {
+            max-width: 750px;
+            margin: 0 auto;
+            background: #1e293b;
+            padding: 35px;
+            border-radius: 12px;
+            border: 1px solid #334155;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+        }
+        .instructions-container h1 {
+            color: #38bdf8;
+            border-bottom: 2px solid #0284c7;
+            padding-bottom: 10px;
+        }
+        .instructions-container ul {
+            text-align: left;
+            line-height: 1.8;
+            color: #cbd5e1;
+            font-size: 16px;
+        }
+        .instructions-container li {
+            margin-bottom: 12px;
+        }
+        .badge {
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-weight: bold;
+            color: #fff;
+        }
+        .badge-joker-win { background-color: #10b981; }
+        .badge-joker-lose { background-color: #ef4444; }
+        .btn-back {
+            display: inline-block;
+            margin-top: 25px;
+            padding: 12px 24px;
+            background-color: #0284c7;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: bold;
+            transition: background 0.3s;
+        }
+        .btn-back:hover {
+            background-color: #0369a1;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="instructions-container">
+        <h1>🧠 Reglas del Desafío Mente Crítica</h1>
+        
+        <p>Aponte a prueba tus conocimientos en ciencias, matemáticas, lenguaje e historia. Revisa el protocolo de la prueba:</p>
+
+        <ul>
+            <li><strong>Meta:</strong> Superar las 8 etapas del tablero para obtener el <strong>Certificado de Excelencia en Saberes Universales</strong>.</li>
+            <li><strong>Avanzada Progresiva:</strong> El progreso se realiza por columnas. Únicamente puedes seleccionar módulos habilitados en el nivel actual.</li>
+            <li><strong>Desafíos Criteriales:</strong> Cada módulo contiene una pregunta de opción múltiple.
+                <ul>
+                    <li><strong>Respuesta Correcta ✅:</strong> Garantiza la aprobación e ingreso a la siguiente fase.</li>
+                    <li><strong>Respuesta Incorrecta ❌:</strong> Inhabilita la tarjeta seleccionada. Deberás probar otro módulo del mismo nivel.</li>
+                </ul>
+            </li>
+            <li><strong>Eventos Especiales 🃏:</strong>
+                <ul>
+                    <li><span class="badge badge-joker-win">🚀 Impulso de Fase:</span> Otorga paso libre automático a la siguiente fase.</li>
+                    <li><span class="badge badge-joker-lose">☠️ Reinicio de Sistema:</span> Invalida el avance actual y fuerza la reaparición en la Fase 1.</li>
+                </ul>
+            </li>
+        </ul>
+
+        <a href="index.html" class="btn-back">⬅️ Regresar al Juego</a>
+    </div>
+
+</body>
+</html>

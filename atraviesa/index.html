@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Desafío Matemático Galáctico</title>
+    <title>Desafío Mente Crítica - Cultura General</title>
     <link rel="stylesheet" href="style.css">
-    <!-- Carga de MathJax para formato matemático LaTeX -->
+    <!-- Carga de MathJax para soporte de expresiones complejas si se requiere -->
     <script>
         window.MathJax = {
             tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] },
@@ -16,35 +16,45 @@
 </head>
 <body>
 
-    <div class="space-background"></div>
+    <!-- Botón Flotante para Instrucciones -->
+    <button id="open-instructions-btn" class="help-btn" title="Reglas del Juego">🧠 Reglas</button>
 
-    <header class="game-header">
-        <h1>🚀 Desafío Matemático Galáctico 🌌</h1>
-        <p id="player-status" class="player-status-hidden">Cadete: <span id="display-name"></span></p>
-    </header>
-
-    <main>
-        <div id="game-board"></div>
-    </main>
+    <h1>DESAFÍO MENTE CRÍTICA 🌐</h1>
+    <div id="game-board"></div>
 
     <!-- Modal para el ingreso del nombre -->
     <div id="start-modal" class="modal">
-        <div class="modal-content cosmic-modal">
-            <div class="modal-icon">🛸</div>
-            <h2>Misión Espacial Matemática</h2>
-            <p>Ingresa tu nombre, cadete, para iniciar la travesía estelar:</p>
-            <input type="text" id="player-name-input" placeholder="Nombre completo" autocomplete="off" />
-            <button id="start-game-btn" class="cosmic-btn">¡Despegar 🚀!</button>
+        <div class="modal-content">
+            <h2>¡Bienvenido al Desafío Mente Crítica!</h2>
+            <p>Ingresa tu nombre para iniciar la evaluación de conocimientos:</p>
+            <input type="text" id="player-name-input" placeholder="Nombre y Apellidos" autocomplete="off" />
+            <button id="start-game-btn">Iniciar Desafío 🚀</button>
+        </div>
+    </div>
+
+    <!-- Modal de Instrucciones Interactivo -->
+    <div id="instructions-modal" class="modal modal-hidden">
+        <div class="modal-content instructions-modal-content">
+            <h2>🧠 Guía de Competencia</h2>
+            <ul class="instructions-list">
+                <li><strong>Objetivo:</strong> Cruzar el tablero resolviendo retos de cultura general para certificar tus conocimientos.</li>
+                <li><strong>Mecánica:</strong> Debes avanzar columna por columna. Solo se permite interactuar con los módulos de la columna activa.</li>
+                <li><strong>Desafíos:</strong> Responde preguntas de opción múltiple. Si fallas, la opción se inactiva y deberás intentar con otro módulo del mismo nivel.</li>
+                <li><strong>Comodines 🃏:</strong>
+                    <br>🚀 <strong>Impulso de Fase:</strong> Te avanza automáticamente al siguiente nivel.
+                    <br>☠️ <strong>Reinicio de Sistema:</strong> Te regresa al punto de partida.
+                </li>
+            </ul>
+            <button id="close-instructions-btn">Comprendido</button>
         </div>
     </div>
 
     <!-- Modal para las preguntas -->
     <div id="question-modal" class="modal modal-hidden">
-        <div class="modal-content cosmic-modal">
-            <div class="modal-badge">⚠️ Ancla Estelar Detectada</div>
-            <h3 id="question-text"></h3>
+        <div class="modal-content">
+            <h2 id="question-text"></h2>
             <div id="answer-options"></div>
-            <button id="submit-answer" class="cosmic-btn">Transmitir Respuesta 📡</button>
+            <button id="submit-answer">Confirmar Respuesta</button>
             <p id="feedback-text"></p>
         </div>
     </div>
@@ -54,17 +64,17 @@
         <div class="modal-content certificate-content">
             <div class="certificate-border" id="certificate-to-print">
                 <div class="certificate-header">
-                    <h2>🌟 DIPLOMA DE COMANDANTE ESTELAR 🌟</h2>
-                    <p>Otorgado con orgullo a:</p>
+                    <h2>CERTIFICADO DE EXCELENCIA ACADÉMICA</h2>
+                    <p>Otorgado formalmente a:</p>
                 </div>
                 <h1 id="cert-player-name">Nombre del Estudiante</h1>
                 <p class="certificate-body">
-                    Por haber superado exitosamente todas las coordenadas de razonamiento matemático en la misión espacial, demostrando agilidad mental, destreza y brillantez en el cosmos del <strong>Desafío Matemático</strong>.
+                    Por demostrar un nivel superior de razonamiento, dominio conceptual y alto desempeño analítico al superar el <strong>Desafío Mente Crítica en Cultura General</strong>.
                 </p>
                 <div class="certificate-footer">
                     <div class="signature">
                         <hr>
-                        <p>Control de Misión (Docente)</p>
+                        <p>Comité Evaluación y Saberes</p>
                     </div>
                     <div class="date-container">
                         <p id="cert-date"></p>
@@ -72,12 +82,14 @@
                 </div>
             </div>
             <div class="certificate-actions">
-                <button id="print-cert-btn" class="cosmic-btn">🖨️ Imprimir Diploma</button>
-                <button id="restart-game-btn" class="cosmic-btn secondary">🔄 Nueva Misión</button>
+                <button id="print-cert-btn">🖨️ Imprimir / Guardar PDF</button>
+                <button id="restart-game-btn">🔄 Volver a Intentar</button>
             </div>
         </div>
     </div>
-	<script src="preguntas.js"></script>
-   	 <script src="script.js"></script>
+
+    <!-- Archivos JS -->
+    <script src="preguntas.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>

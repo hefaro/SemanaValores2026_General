@@ -1,6 +1,7 @@
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #f0f8ff;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background-color: #0f172a;
+    color: #f8fafc;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -12,16 +13,19 @@ body {
 }
 
 h1 {
-    color: #2c3e50;
+    color: #38bdf8;
     text-align: center;
-    margin-bottom: 20px;
+    margin-bottom: 25px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    font-size: 26px;
 }
 
 #game-board {
     display: grid;
     grid-template-columns: repeat(8, 100px);
     grid-template-rows: repeat(3, 140px);
-    gap: 10px;
+    gap: 12px;
     perspective: 1000px;
 }
 
@@ -30,7 +34,7 @@ h1 {
     height: 140px;
     position: relative;
     transform-style: preserve-3d;
-    transition: transform 0.6s;
+    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
     cursor: pointer;
 }
 
@@ -44,53 +48,52 @@ h1 {
     height: 100%;
     backface-visibility: hidden;
     border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
     display: flex;
     justify-content: center;
     align-items: center;
     text-align: center;
-    color: white;
     box-sizing: border-box;
-    padding: 8px;
+    padding: 10px;
 }
 
-/* Cara superior / frontal (donde aparece la abejita) */
+/* Frente de la tarjeta (Estilo Cyber Tech) */
 .card-front {
-    background: linear-gradient(135deg, #f1c40f, #f39c12);
-    border: 3px solid #d35400;
+    background: linear-gradient(135deg, #1e293b, #0f172a);
+    border: 2px solid #0284c7;
 }
 
-/* Icono o imagen de la abejita escalado adecuadamente */
-.card-front .bee-icon, .card-front img {
+.card-front .tech-icon {
     width: 60px;
     height: 60px;
-    max-width: 80%;
-    max-height: 80%;
-    object-fit: contain;
-    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+    filter: drop-shadow(0 0 6px rgba(56, 189, 248, 0.4));
 }
 
 .card-back {
-    background: #ffffff;
-    color: #333;
+    background: #1e293b;
+    color: #f8fafc;
     transform: rotateY(180deg);
-    font-weight: bold;
-    font-size: 20px;
+    font-weight: 600;
+    font-size: 16px;
+    border: 2px solid #475569;
 }
 
 .card-back.correct {
-    background-color: #2ecc71;
+    background-color: #059669;
+    border-color: #10b981;
     color: white;
 }
 
 .card-back.incorrect {
-    background-color: #e74c3c;
+    background-color: #dc2626;
+    border-color: #ef4444;
     color: white;
 }
 
 .card.disabled {
     pointer-events: none;
-    opacity: 0.5;
+    opacity: 0.35;
+    filter: grayscale(80%);
 }
 
 /* Modales */
@@ -100,7 +103,8 @@ h1 {
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.75);
+    background-color: rgba(15, 23, 42, 0.85);
+    backdrop-filter: blur(4px);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -108,141 +112,226 @@ h1 {
 }
 
 .modal-content {
-    background-color: white;
+    background-color: #1e293b;
+    border: 1px solid #334155;
+    color: #f8fafc;
     padding: 30px;
     border-radius: 12px;
     width: 90%;
-    max-width: 500px;
+    max-width: 520px;
     text-align: center;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
 }
 
 #player-name-input {
-    width: 80%;
-    padding: 10px;
-    margin: 15px 0;
+    width: 85%;
+    padding: 12px;
+    margin: 20px 0;
     font-size: 16px;
-    border: 2px solid #3498db;
+    background-color: #0f172a;
+    border: 2px solid #0284c7;
+    color: white;
     border-radius: 6px;
     text-align: center;
+    outline: none;
+}
+
+#player-name-input:focus {
+    border-color: #38bdf8;
 }
 
 #start-game-btn, #submit-answer, .certificate-actions button {
-    padding: 12px 25px;
-    background-color: #2ecc71;
+    padding: 12px 28px;
+    background-color: #0284c7;
     color: white;
     border: none;
     border-radius: 6px;
     cursor: pointer;
-    font-size: 16px;
-    font-weight: bold;
+    font-size: 15px;
+    font-weight: 600;
     transition: background 0.2s;
 }
 
 #start-game-btn:hover, #submit-answer:hover, .certificate-actions button:hover {
-    background-color: #27ae60;
+    background-color: #0369a1;
 }
 
 #answer-options button {
     display: block;
     width: 100%;
-    padding: 12px;
-    margin: 8px 0;
-    border: 1px solid #ccc;
+    padding: 12px 15px;
+    margin: 10px 0;
+    border: 1px solid #334155;
     border-radius: 6px;
     cursor: pointer;
-    background-color: #f9f9f9;
-    font-size: 18px;
+    background-color: #0f172a;
+    color: #cbd5e1;
+    font-size: 15px;
+    text-align: left;
+    transition: all 0.2s;
+}
+
+#answer-options button:hover {
+    border-color: #38bdf8;
+    color: white;
 }
 
 #answer-options button.selected {
-    background-color: #3498db;
+    background-color: #0284c7;
     color: white;
-    border-color: #2980b9;
+    border-color: #38bdf8;
 }
 
 .modal-hidden {
     display: none !important;
 }
 
-/* Estilos para el Diploma */
+/* Estilos para el Diploma de Excelencia Formal */
 .certificate-content {
-    max-width: 650px;
-    background-color: #fff;
-    padding: 20px;
+    max-width: 680px;
+    background-color: #ffffff;
+    color: #0f172a;
+    padding: 25px;
+    border-radius: 6px;
 }
 
 .certificate-border {
-    border: 8px double #1a365d;
-    padding: 30px;
-    background-color: #fffdf9;
-    border-radius: 4px;
+    border: 4px double #0f172a;
+    padding: 35px;
+    background-color: #f8fafc;
 }
 
 .certificate-header h2 {
     font-family: 'Georgia', serif;
-    color: #1a365d;
+    color: #0f172a;
     letter-spacing: 2px;
+    font-size: 22px;
     margin-bottom: 5px;
 }
 
 #cert-player-name {
     font-family: 'Georgia', serif;
-    font-size: 32px;
-    color: #b7791f;
-    margin: 20px 0;
-    text-decoration: underline;
+    font-size: 30px;
+    color: #0369a1;
+    margin: 25px 0;
+    border-bottom: 2px solid #0369a1;
+    display: inline-block;
+    padding-bottom: 5px;
 }
 
 .certificate-body {
-    font-size: 16px;
-    color: #4a5568;
-    line-height: 1.6;
+    font-size: 15px;
+    color: #334155;
+    line-height: 1.7;
 }
 
 .certificate-footer {
     display: flex;
     justify-content: space-between;
     align-items: flex-end;
-    margin-top: 40px;
+    margin-top: 45px;
 }
 
 .signature hr {
     border: none;
-    border-top: 1px solid #718096;
-    width: 180px;
+    border-top: 1px solid #64748b;
+    width: 200px;
+}
+
+.signature p, .date-container p {
+    font-size: 13px;
+    color: #475569;
 }
 
 .certificate-actions {
     margin-top: 20px;
     display: flex;
-    gap: 10px;
+    gap: 12px;
     justify-content: center;
 }
 
-/* Adaptación Responsive para Móviles */
+/* Botón Flotante de Ayuda */
+.help-btn {
+    position: fixed;
+    top: 18px;
+    right: 18px;
+    background-color: #1e293b;
+    color: #38bdf8;
+    border: 1px solid #0284c7;
+    border-radius: 20px;
+    padding: 8px 18px;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    z-index: 10;
+    transition: all 0.2s;
+}
+
+.help-btn:hover {
+    background-color: #0284c7;
+    color: white;
+}
+
+/* Modal Instrucciones */
+.instructions-modal-content {
+    text-align: left;
+    max-width: 580px;
+}
+
+.instructions-modal-content h2 {
+    text-align: center;
+    color: #38bdf8;
+}
+
+.instructions-list {
+    padding-left: 20px;
+    line-height: 1.7;
+    color: #cbd5e1;
+}
+
+.instructions-list li {
+    margin-bottom: 12px;
+}
+
+#close-instructions-btn {
+    display: block;
+    margin: 20px auto 0 auto;
+    padding: 10px 24px;
+    background-color: #0284c7;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+#close-instructions-btn:hover {
+    background-color: #0369a1;
+}
+
+/* Responsivo para Celulares */
 @media (max-width: 900px) {
     #game-board {
         grid-template-columns: repeat(3, 1fr);
         grid-template-rows: repeat(8, 80px);
         gap: 8px;
         width: 100%;
-        max-width: 400px;
+        max-width: 380px;
     }
     .card {
         width: auto;
         height: 80px;
     }
-    .card-front .bee-icon, .card-front img {
-        width: 40px;
-        height: 40px;
+    .card-front .tech-icon {
+        width: 35px;
+        height: 35px;
     }
     .card-face {
-        font-size: 14px;
+        font-size: 13px;
     }
 }
 
-/* Ajustes de Impresión */
+/* Impresión del Diploma */
 @media print {
     body * {
         visibility: hidden;
@@ -261,91 +350,4 @@ h1 {
     .certificate-actions {
         display: none;
     }
-    .certificate-border {
-        border: 4px double #000;
-    }
 }
-
-
-/* Botón de Ayuda Flotante */
-.help-btn {
-    position: fixed;
-    top: 15px;
-    right: 15px;
-    background-color: #f1c40f;
-    color: #2c3e50;
-    border: 2px solid #d35400;
-    border-radius: 20px;
-    padding: 8px 16px;
-    font-weight: bold;
-    font-size: 15px;
-    cursor: pointer;
-    box-shadow: 0 3px 6px rgba(0,0,0,0.2);
-    z-index: 10;
-    transition: transform 0.2s, background-color 0.2s;
-}
-
-.help-btn:hover {
-    background-color: #f39c12;
-    transform: scale(1.05);
-}
-
-/* Modal de Instrucciones */
-.instructions-modal-content {
-    text-align: left;
-    max-width: 550px;
-}
-
-.instructions-modal-content h2 {
-    text-align: center;
-    color: #2c3e50;
-}
-
-.instructions-list {
-    padding-left: 20px;
-    line-height: 1.6;
-    color: #4a5568;
-}
-
-.instructions-list li {
-    margin-bottom: 12px;
-}
-
-#close-instructions-btn {
-    display: block;
-    margin: 20px auto 0 auto;
-    padding: 10px 25px;
-    background-color: #3498db;
-    color: white;
-    border: none;
-    border-radius: 6px;
-    font-weight: bold;
-    cursor: pointer;
-}
-
-#close-instructions-btn:hover {
-    background-color: #2980b9;
-}
-4. Archivo script.js (Actualizaciones JS)
-Añade las referencias de los botones e interactividad para abrir y cerrar las instrucciones sin interferir con la partida actual:
-
-JavaScript
-// Agregar dentro de document.addEventListener('DOMContentLoaded', () => { ... })
-
-// Referencias a elementos de Instrucciones
-const openInstructionsBtn = document.getElementById('open-instructions-btn');
-const closeInstructionsBtn = document.getElementById('close-instructions-btn');
-const instructionsModal = document.getElementById('instructions-modal');
-
-// Abrir Modal de Instrucciones
-openInstructionsBtn.addEventListener('click', () => {
-    instructionsModal.classList.remove('modal-hidden');
-    if (window.MathJax) {
-        MathJax.typesetPromise([instructionsModal]);
-    }
-});
-
-// Cerrar Modal de Instrucciones
-closeInstructionsBtn.addEventListener('click', () => {
-    instructionsModal.classList.add('modal-hidden');
-});
