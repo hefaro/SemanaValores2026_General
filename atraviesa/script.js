@@ -1,6 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
 
-   
     const isMobile = window.matchMedia("(max-width: 900px)").matches;
     const ROWS = isMobile ? 8 : 3;
     const COLS = isMobile ? 3 : 8;
@@ -19,8 +18,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const startModal = document.getElementById('start-modal');
     const playerNameInput = document.getElementById('player-name-input');
     const startGameBtn = document.getElementById('start-game-btn');
-    const playerStatus = document.getElementById('player-status');
-    const displayName = document.getElementById('display-name');
     
     const questionModal = document.getElementById('question-modal');
     const questionText = document.getElementById('question-text');
@@ -34,6 +31,45 @@ document.addEventListener('DOMContentLoaded', () => {
     const printCertBtn = document.getElementById('print-cert-btn');
     const restartGameBtn = document.getElementById('restart-game-btn');
 
+    // Referencias y control del Modal de Instrucciones
+    const openInstructionsBtn = document.getElementById('open-instructions-btn');
+    const closeInstructionsBtn = document.getElementById('close-instructions-btn');
+    const instructionsModal = document.getElementById('instructions-modal');
+
+    if (openInstructionsBtn && instructionsModal) {
+        openInstructionsBtn.addEventListener('click', () => {
+            instructionsModal.classList.remove('modal-hidden');
+            if (window.MathJax) {
+                MathJax.typesetPromise([instructionsModal]);
+            }
+        });
+    }
+
+    if (closeInstructionsBtn && instructionsModal) {
+        closeInstructionsBtn.addEventListener('click', () => {
+            instructionsModal.classList.add('modal-hidden');
+        });
+    }
+
+    // Plantilla SVG para la abejita en la cara superior
+    const beeSvgHTML = `
+        <svg class="bee-icon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <!-- Alas -->
+            <ellipse cx="35" cy="30" rx="15" ry="25" fill="#e0f7fa" stroke="#333" stroke-width="3" transform="rotate(-30 35 30)"/>
+            <ellipse cx="65" cy="30" rx="15" ry="25" fill="#e0f7fa" stroke="#333" stroke-width="3" transform="rotate(30 65 30)"/>
+            <!-- Cuerpo de la abeja -->
+            <ellipse cx="50" cy="55" rx="30" ry="35" fill="#f1c40f" stroke="#333" stroke-width="4"/>
+            <!-- Franjas negras -->
+            <path d="M 23,45 Q 50,52 77,45" fill="none" stroke="#333" stroke-width="7" stroke-linecap="round"/>
+            <path d="M 21,60 Q 50,68 79,60" fill="none" stroke="#333" stroke-width="7" stroke-linecap="round"/>
+            <!-- Ojos -->
+            <circle cx="40" cy="35" r="4" fill="#333"/>
+            <circle cx="60" cy="35" r="4" fill="#333"/>
+            <!-- Sonrisa -->
+            <path d="M 42,42 Q 50,48 58,42" fill="none" stroke="#333" stroke-width="3" stroke-linecap="round"/>
+        </svg>
+    `;
+
     // Sonidos mediante Web Audio API
     const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
@@ -45,7 +81,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const gain = audioCtx.createGain();
         osc.type = type;
         osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
-        gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
+        gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
         gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + duration);
         osc.connect(gain);
         gain.connect(audioCtx.destination);
@@ -56,23 +92,24 @@ document.addEventListener('DOMContentLoaded', () => {
     function playSoundEffect(type) {
         switch (type) {
             case 'flip':
-                playTone(500, 'sine', 0.08);
+                playTone(400, 'sine', 0.08);
                 break;
             case 'correct':
-                playTone(587.33, 'triangle', 0.12);
-                setTimeout(() => playTone(880, 'triangle', 0.2), 100);
+                playTone(523.25, 'triangle', 0.15);
+                setTimeout(() => playTone(659.25, 'triangle', 0.2), 120);
                 break;
             case 'incorrect':
-                playTone(160, 'sawtooth', 0.2);
+                playTone(220, 'sawtooth', 0.18);
+                setTimeout(() => playTone(180, 'sawtooth', 0.25), 180);
                 break;
             case 'win':
                 [523.25, 659.25, 783.99, 1046.50].forEach((freq, idx) => {
-                    setTimeout(() => playTone(freq, 'sine', 0.2), idx * 110);
+                    setTimeout(() => playTone(freq, 'sine', 0.25), idx * 130);
                 });
                 break;
             case 'lose':
-                [250, 200, 150].forEach((freq, idx) => {
-                    setTimeout(() => playTone(freq, 'sawtooth', 0.2), idx * 100);
+                [300, 250, 200, 150].forEach((freq, idx) => {
+                    setTimeout(() => playTone(freq, 'sawtooth', 0.2), idx * 110);
                 });
                 break;
         }
@@ -85,12 +122,10 @@ document.addEventListener('DOMContentLoaded', () => {
     startGameBtn.addEventListener('click', () => {
         const val = playerNameInput.value.trim();
         if (val === '') {
-            alert('Por favor, ingresa tu nombre de cadete.');
+            alert('Por favor, ingresa tu nombre.');
             return;
         }
         playerName = val;
-        displayName.textContent = playerName;
-        playerStatus.classList.remove('player-status-hidden');
         startModal.classList.add('modal-hidden');
         initGame();
     });
@@ -117,13 +152,14 @@ document.addEventListener('DOMContentLoaded', () => {
             const card = document.createElement('div');
             card.classList.add('card');
             card.dataset.index = i;
+            
             card.innerHTML = `
                 <div class="card-face card-front">
-                    <span class="card-icon">🪐</span>
-                    <span class="card-number">#${i + 1}</span>
+                    ${beeSvgHTML}
                 </div>
                 <div class="card-face card-back"></div>
             `;
+            
             card.addEventListener('click', handleCardClick);
             gameBoard.appendChild(card);
         }
@@ -145,55 +181,40 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-function handleCardClick(event) {
+    function handleCardClick(event) {
         if (boardLocked) return;
         const card = event.currentTarget;
         if (card.classList.contains('disabled')) return;
         
+        playSoundEffect('flip');
         boardLocked = true;
+        card.classList.add('flipped');
         activeCard = card;
         
         const index = parseInt(card.dataset.index);
         const cardInfo = cardsData[index];
         const backFace = card.querySelector('.card-back');
 
-        // 1. Asignamos el contenido y estilos al reverso con anticipación
-        if (cardInfo.type === 'question') {
-            backFace.textContent = '⚡';
-        } else if (cardInfo.type === 'joker') {
-            if (cardInfo.joker === 'advance') {
-                backFace.innerHTML = '🚀<br><small>¡Hiperespacio!</small>';
-                backFace.classList.add('correct');
-            } else {
-                backFace.innerHTML = '☄️<br><small>¡Agujero Negro!</small>';
-                backFace.classList.add('incorrect');
-            }
-        }
-
-        // 2. Damos un respiro al navegador mediante requestAnimationFrame para asegurar una transición fluida
-        requestAnimationFrame(() => {
-            playSoundEffect('flip');
-            card.classList.add('flipped');
-        });
-
-        // 3. Esperamos a que termine de girar la tarjeta (600ms) para ejecutar la lógica
         setTimeout(() => {
             if (cardInfo.type === 'question') {
+                backFace.textContent = '🤔';
                 showQuestion(cardInfo.data);
-            } else if (cardInfo.joker === 'advance') {
-                playSoundEffect('correct');
-                setTimeout(advanceLevel, 600);
-            } else {
-backFace.innerHTML = '☄️<br><small>¡Agujero Negro!</small>';
-backFace.classList.add('incorrect');
-void card.offsetWidth;
-card.classList.add('flipped');
-                playSoundEffect('lose');
-                // Pausa exacta de 3 segundos para leer el Agujero Negro antes del reinicio
-                setTimeout(initGame, 3000); 
+            } else if (cardInfo.type === 'joker') {
+                if (cardInfo.joker === 'advance') {
+                    backFace.innerHTML = '🚀<br>¡Avanzas!';
+                    backFace.classList.add('correct');
+                    playSoundEffect('correct');
+                    setTimeout(advanceLevel, 1200);
+                } else {
+                    playSoundEffect('lose');
+                    backFace.innerHTML = '☠️<br>¡Reinicia!';
+                    backFace.classList.add('incorrect');
+                    setTimeout(initGame, 1800);
+                }
             }
         }, 600);
     }
+
     function showQuestion(questionData) {
         questionText.textContent = questionData.question;
         answerOptions.innerHTML = '';
@@ -213,7 +234,6 @@ card.classList.add('flipped');
         submitBtn.onclick = () => checkAnswer(questionData.answer);
         questionModal.classList.remove('modal-hidden');
 
-        // Reprocesar expresiones LaTeX en el modal con MathJax
         if (window.MathJax) {
             MathJax.typesetPromise([questionModal]);
         }
@@ -222,7 +242,7 @@ card.classList.add('flipped');
     function checkAnswer(correctAnswer) {
         const selectedButton = document.querySelector('#answer-options .selected');
         if (!selectedButton) {
-            feedbackText.textContent = '¡Selecciona una coordenada de respuesta!';
+            feedbackText.textContent = 'Por favor, selecciona una respuesta.';
             return;
         }
 
@@ -231,12 +251,12 @@ card.classList.add('flipped');
 
         if (selectedButton.dataset.answer === correctAnswer) {
             playSoundEffect('correct');
-            backFace.innerHTML = '✨<br><small>¡Impacto Exacto!</small>';
+            backFace.innerHTML = '✅<br>¡Correcto!';
             backFace.classList.add('correct');
             setTimeout(advanceLevel, 1000);
         } else {
             playSoundEffect('incorrect');
-            backFace.innerHTML = '💥<br><small>¡Desviado!</small>';
+            backFace.innerHTML = '❌<br>¡Incorrecto!';
             backFace.classList.add('incorrect');
             activeCard.classList.add('disabled', 'incorrect-answered');
             boardLocked = false;
